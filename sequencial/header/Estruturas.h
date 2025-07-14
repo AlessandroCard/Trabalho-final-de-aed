@@ -89,6 +89,8 @@ class ListaOrdenada : public ListaNaoOrdenada
 private:
     // O(log n) — busca binária para posição correta
     int BuscarPosicao(int id);
+    // O(log n) — busca binária exata por ID (retorna índice ou -1)
+    int BuscarIndicePeloIdBinario(int id) const;
 
 public:
     ListaOrdenada(int cap = 10);
