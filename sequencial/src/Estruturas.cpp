@@ -1,5 +1,3 @@
-// Arquivo: Estruturas.cpp - Implementação com uso consistente de busca binária na ListaOrdenada
-
 #include "../header/Estruturas.h"
 
 // ----- Elemento -----
