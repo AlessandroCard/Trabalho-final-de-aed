@@ -103,6 +103,8 @@ int ListaOrdenada::BuscarPosicao(int id) {
     return esq;
 }
 
+
+
 void ListaOrdenada::InserirOrdenado(Elemento* e) {
     if (getTamanho() == getCapacidade()) aumentarCapacidade();
     int pos = BuscarPosicao(e->getID());
@@ -111,24 +113,49 @@ void ListaOrdenada::InserirOrdenado(Elemento* e) {
     tamanho++;
 }
 
+int ListaOrdenada::BuscarIndicePeloIdBinario(int id) const {
+    int esq = 0, dir = getTamanho() - 1;
+    while (esq <= dir) {
+        int meio = (esq + dir) / 2;
+        if (elementos[meio]->getID() == id) return meio;
+        if (elementos[meio]->getID() < id) esq = meio + 1;
+        else dir = meio - 1;
+    }
+    return -1; // ID não encontrado
+}
+
 void ListaOrdenada::RemoverPeloId(int id) {
-    int pos = BuscarPosicao(id);
-    if (pos < tamanho && elementos[pos]->getID() == id) {
+    int pos = BuscarIndicePeloIdBinario(id);
+    if (pos != -1) {
         delete elementos[pos];
         for (int i = pos; i < tamanho - 1; i++) elementos[i] = elementos[i + 1];
         tamanho--;
+    } else {
+        std::cout << "ID nao encontrado. Nada removido.\n";
     }
 }
 
 void ListaOrdenada::AlterarPeloId(int id, Elemento* novo) {
-    RemoverPeloId(id);
-    InserirOrdenado(novo);
+    int pos = BuscarIndicePeloIdBinario(id);
+    if (pos != -1) {
+        delete elementos[pos];
+        for (int i = pos; i < tamanho - 1; i++) elementos[i] = elementos[i + 1];
+        tamanho--;
+        InserirOrdenado(novo);
+    } else {
+        std::cout << "ID nao encontrado. Nenhuma alteracao feita.\n";
+        delete novo; // Evita que a memória fique vazando
+    }
 }
 
 Elemento* ListaOrdenada::BuscarPeloId(int id) {
-    int pos = BuscarPosicao(id);
-    if (pos < tamanho && elementos[pos]->getID() == id) return elementos[pos];
-    return nullptr;
+    int pos = BuscarIndicePeloIdBinario(id);
+    if(pos != -1) {
+        return elementos[pos];
+    } else {
+        std::cout << "ID nao encontrado.\n";
+        return nullptr;
+    }
 }
 
 // ----- Pilha -----
@@ -137,7 +164,7 @@ bool pilha::pilhaVazia() const { return lista.getTamanho() == 0; }
 bool pilha::pilhaCheia() const { return lista.getTamanho() == lista.getCapacidade(); }
 void pilha::empilhar(Elemento* e) { lista.InserirNoInicio(e); }
 void pilha::desempilhar() {
-    if (!pilhaVazia()) lista.RemoverFinal();
+    if (!pilhaVazia()) lista.RemoverInicio();
 }
 Elemento* pilha::ConsultarTopo() const {
     return pilhaVazia() ? nullptr : const_cast<Elemento*>(lista.getElementoNaPosicao(0));
