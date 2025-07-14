@@ -96,7 +96,7 @@ public:
     // O(n) — busca binária + desloca elementos para abrir espaço
     void InserirOrdenado(Elemento* e);
 
-    // O(n) — busca linear + desloca elementos para remover
+    // O(n) — busca binária + desloca elementos para remover
     void RemoverPeloId(int id);
 
     // O(n) — remove + insere (cada um O(n))
